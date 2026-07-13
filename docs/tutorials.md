@@ -62,13 +62,13 @@ Presence Server - design and configuration of Presence Server in **OpenSIPS**.
 
 - - -
 
-## [Presence User Agent](tutorials-presence-useragent)
+## [Presence User Agent](/tutorials-presence-useragent)
 
 Presence User Agent - support and configuration in **OpenSIPS**.
 
 - - -
 
-## [Presence Resource List Server](tutorials-presence-rls)
+## [Presence Resource List Server](/tutorials-presence-rls)
 ﻿
 Presence RLS - support and configuration in **OpenSIPS**.
 ﻿
