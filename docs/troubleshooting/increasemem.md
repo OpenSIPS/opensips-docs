@@ -55,3 +55,21 @@ opensips -m 256
 # this will run OpenSIPS with 256MB of share memory
 
 ```
+
+---
+
+## Let the memory grow (OpenSIPS 4.1 and later)
+
+With the HG_MALLOC allocator both sizes can be given as `INIT:CAP`: OpenSIPS
+starts with INIT and grows on demand up to CAP, so a pool no longer has to be
+sized for the worst case up front:
+
+```bash
+
+opensips -a HG_MALLOC -m 256:2g -M 8:32
+
+# 256 MB of shared memory growing up to 2 GB, 8 MB of private memory per process growing up to 32 MB
+
+```
+
+See [Out Of Memory](/troubleshooting/outofmem#let-the-pool-grow-opensips-41-and-later) for monitoring and host requirements.
