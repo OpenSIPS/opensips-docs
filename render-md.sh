@@ -86,10 +86,10 @@ def rewrite_url(url: str) -> str:
 
 
 def slugify(text: str) -> str:
-    text = re.sub(r"<[^>]+>", "", text)
-    text = re.sub(r"`([^`]+)`", r"\1", text)
-    text = re.sub(r"[*_~\[\]()]|&[a-zA-Z#0-9]+;", "", text)
-    text = re.sub(r"[^a-zA-Z0-9]+", "-", text.lower()).strip("-")
+    # Use visible heading text, preserving underscores in literal identifiers.
+    text = html.unescape(re.sub(r"<[^>]+>", "", inline(text)))
+    text = re.sub(r"[*~\[\]()]", "", text)
+    text = re.sub(r"[^a-zA-Z0-9_]+", "-", text.lower()).strip("-")
     return text or "section"
 
 
@@ -175,9 +175,9 @@ def inline(text: str) -> str:
     text = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", image_repl, text)
     text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link_repl, text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
-    text = re.sub(r"__([^_]+)__", r"<strong>\1</strong>", text)
+    text = re.sub(r"(?<!\w)__([^_]+)__(?!\w)", r"<strong>\1</strong>", text)
     text = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"<em>\1</em>", text)
-    text = re.sub(r"(?<!_)_([^_\n]+)_(?!_)", r"<em>\1</em>", text)
+    text = re.sub(r"(?<!\w)_([^_\n]+)_(?!\w)", r"<em>\1</em>", text)
 
     return restore_tokens(text)
 
@@ -279,7 +279,7 @@ def render_blocks(text: str) -> str:
             i += 1
             continue
 
-        fence = re.match(r"^```([A-Za-z0-9_-]+)?\s*$", stripped)
+        fence = re.match(r"^```([A-Za-z0-9_-]+)?(?:[ \t]+.*)?$", stripped)
         if fence:
             lang = fence.group(1) or ""
             code = []
